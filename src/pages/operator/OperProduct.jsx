@@ -4,6 +4,12 @@ import {} from "react";
 import { useParams } from "react-router-dom";
 import { API_PATH, CONFIG, IMAGE_CONFIG } from "../../constants/constants";
 import { toast } from "react-toastify";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const OperProduct = () => {
   const [userId, setUserId] = useState(localStorage.getItem("USER_ID") || "");
@@ -217,7 +223,7 @@ const OperProduct = () => {
         <div className="prod_main">
           <div className="dash_name_box">
             <div className="dash_name">Ziyoratchilar ro’yhati</div>
-            <div className="d-flex gap-3 align-items-center">
+            <div className="d-flex align-items-center">
               {/* <div className="my_select">
                 <select className="dash_sel" name="" id="">
                   <option value="">Filiallar</option>
@@ -247,7 +253,7 @@ const OperProduct = () => {
               </div>
             </div>
           </div>
-          <div className="prod_text">
+          <div className="prod_text for_dnone_media">
             <div className="prod_text_h prod_text_h1">#</div>
             <div className="prod_text_h prod_text_h2">F.I.O</div>
             <div className="prod_text_h prod_text_h3">Pass Num</div>
@@ -262,7 +268,7 @@ const OperProduct = () => {
             <div className="prod_text_h prod_text_h11 text-center">Filiall</div>
           </div>
           {data?.map((item, index) => (
-            <div key={index} className="prod_text2">
+            <div key={index} className="prod_text2 for_dnone_media">
               <div className="prod_text_p prod_text_h1">{index + 1}</div>
               <div
                 onClick={() => {
@@ -311,6 +317,95 @@ const OperProduct = () => {
                 {item.branch_name}
               </div>
             </div>
+          ))}
+        </div>
+
+        <div className="accor_for_media">
+          {data?.map((item, index) => (
+            <>
+              <Accordion className="my_accor" key={index}>
+                <AccordionSummary
+                  expandIcon={<ArrowDownwardIcon />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                >
+                  <Typography className="d-flex align-items-center jusitfy-content-between">
+                    <div
+                      onClick={() => {
+                        item.owner === userId
+                          ? clientGetID(item.id)
+                          : toast("Bu sizning mijozingiz emas!");
+                      }}
+                    >
+                      {index + 1}. {item.full_name}
+                    </div>{" "}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    <div className="accor_item">
+                      <div className="accor_item_h">Passport Seria</div>
+                      <div className="accor_item_p">{item.passport_seria}</div>
+                    </div>
+                    <div className="accor_item">
+                      <div className="accor_item_h">Narxi</div>
+                      <div className="accor_item_p">$ {item.price}</div>
+                    </div>
+                    <div className="accor_item">
+                      <div className="accor_item_h">To’lov</div>
+                      <div className="accor_item_p">$ {item.payment_taken}</div>
+                    </div>
+                    <div className="accor_item">
+                      <div className="accor_item_h">Qoldi</div>
+                      <div className="accor_item_p">
+                        $ {item.price - item.payment_taken}
+                      </div>
+                    </div>
+                    <div className="accor_item">
+                      <div className="accor_item_h">Passport File</div>
+                      <div className="accor_item_p">
+                        <a target="_blank" href={item.passport_file}>
+                          <span>PassFile</span>
+                        </a>
+                      </div>
+                    </div>
+                    <div className="accor_item">
+                      <div className="accor_item_h">Visa</div>
+                      <div className="accor_item_p">
+                        {item.visa_file ? (
+                          <>
+                            <a target="_blank" href={item.visa_file}>
+                              {" "}
+                              <span>VisaFile</span>
+                            </a>
+                          </>
+                        ) : (
+                          <>
+                            <span>VisaFile</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="accor_item">
+                      <div className="accor_item_h">Tel.Num</div>
+                      <div className="accor_item_p">{item.phone}</div>
+                    </div>
+                    <div className="accor_item">
+                      <div className="accor_item_h">Joylashuv</div>
+                      <div className="accor_item_p">{item.stay}</div>
+                    </div>
+                    <div className="accor_item">
+                      <div className="accor_item_h">Hudud</div>
+                      <div className="accor_item_p">{item.country}</div>
+                    </div>
+                    <div className="accor_item">
+                      <div className="accor_item_h">Filiall</div>
+                      <div className="accor_item_p">{item.branch_name}</div>
+                    </div>
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            </>
           ))}
         </div>
 
