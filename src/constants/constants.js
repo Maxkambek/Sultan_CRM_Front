@@ -1,5 +1,5 @@
-export const API_PATH = "http://mahkambek.uz/";
-// export const API_PATH = "http://127.0.0.1:8000/";
+// export const API_PATH = "http://mahkambek.uz/";
+export const API_PATH = "http://127.0.0.1:8000/";
 
 export const TOKEN = "GAZ/TOKEN";
 export const USER_ROLE = "GAZ/USER_ROLE";

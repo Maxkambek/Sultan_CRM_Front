@@ -6,6 +6,7 @@ import { API_PATH, CONFIG, IMAGE_CONFIG } from "../../constants/constants";
 import { toast } from "react-toastify";
 
 const OperProduct = () => {
+  const [userId, setUserId] = useState(localStorage.getItem("USER_ID") || "");
   const { id } = useParams();
   const [search, setSearch] = useState("");
   const [name, setName] = useState("");
@@ -25,7 +26,6 @@ const OperProduct = () => {
   const [mod, setMod] = useState(false);
   const [currentClient, setCurrentClient] = useState();
   const [description, setDescription] = useState("");
-
   const [updatedPrice, setUpdatedPrice] = useState("");
   const [updatedStay, setUpdatedStay] = useState("");
   const [updatedDescription, setUpdatedDescription] = useState("");
@@ -187,7 +187,7 @@ const OperProduct = () => {
               <div className="prod_name_2_text">
                 <div className="prod_name_2_text_h">Makka Hotel</div>
                 <div className="prod_name_2_text_p">
-                  {paketData?.makka_hotel}
+                  {paketData.makka_hotel}
                 </div>
               </div>
             </div>
@@ -265,7 +265,11 @@ const OperProduct = () => {
             <div key={index} className="prod_text2">
               <div className="prod_text_p prod_text_h1">{index + 1}</div>
               <div
-                onClick={() => clientGetID(item.id)}
+                onClick={() => {
+                  item.owner === userId
+                    ? clientGetID(item.id)
+                    : toast("Bu sizning mijozingiz emas!");
+                }}
                 className="prod_text_p prod_text_h2 cursor"
               >
                 {item.full_name}
@@ -472,7 +476,6 @@ const OperProduct = () => {
                             <div>
                               <label className="input-file ">
                                 <input
-                                  required
                                   type="file"
                                   // accept="file/pdf"
                                   onChange={(e) =>

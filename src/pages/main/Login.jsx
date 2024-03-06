@@ -19,7 +19,7 @@ const Login = () => {
         console.log(res.data);
         localStorage.setItem(TOKEN, res.data.token);
         localStorage.setItem(USER_ROLE, res.data.role.toUpperCase());
-        localStorage.setItem("USERNAME", res.data.name.toUpperCase());
+        localStorage.setItem("USER_ID", res.data.user_id);
         if (res.data.role === "Operator") {
           navigate("/odashboard", { replace: true });
           window.location.reload();
