@@ -25,6 +25,8 @@ const OperProduct = () => {
   const [phone, setPhone] = useState("");
   const [stay, setStay] = useState("");
   const [country, setCountry] = useState("");
+  const [residence, setResidence] = useState("");
+
   const [paketData, setPaketData] = useState([]);
   const [data, setData] = useState([]);
   const [mod2, setMod2] = useState(false);
@@ -87,6 +89,7 @@ const OperProduct = () => {
       formData.append("passport_date", passBerilgan);
       formData.append("passport_file", passFile);
       formData.append("passport_expire", passExpire);
+      formData.append("residence", residence);
 
       axios
         .post(API_PATH + `main/client-create/`, formData, IMAGE_CONFIG)
@@ -99,6 +102,10 @@ const OperProduct = () => {
           setCountry("");
           setPrice("");
           document.location.reload();
+        })
+        .catch((err) => {
+          setMod2(!mod2);
+          toast(`Error: ${err.response.data.msg}`);
         });
     }
   };
@@ -111,6 +118,9 @@ const OperProduct = () => {
     });
   };
 
+  const handleModals = () => {
+    setMod2(!mod2);
+  };
   return (
     <>
       <div className="Product">
@@ -409,33 +419,40 @@ const OperProduct = () => {
           ))}
         </div>
 
-        <div className={`modalcha2 ${mod2 ? "active" : ""}`}>
-          <div className="mod_2_box">
-            <div className="mod_2_box_img">
-              <img
-                onClick={() => setMod2(!mod2)}
-                src="/img/icon_x.png"
-                alt=""
-              />
-            </div>
-            <div className="mod_2_name">
-              <div className="mod_2_name_h">
-                {
-                  " Kiritga ma'lumotlaringizni to'g'ri ekanligiga ishonch hosil qildingizmi?"
-                }
+        {mod2 ? (
+          <>
+            <div className="modalcha2 active">
+              <div className="mod_2_box">
+                <div className="mod_2_box_img">
+                  <img
+                    onClick={() => setMod2(!mod2)}
+                    src="/img/icon_x.png"
+                    alt=""
+                  />
+                </div>
+                <div className="mod_2_name">
+                  <div className="mod_2_name_h">
+                    {
+                      " Kiritga ma'lumotlaringizni to'g'ri ekanligiga ishonch hosil qildingizmi?"
+                    }
+                  </div>
+                </div>
+
+                <div onClick={() => clientAdd()} className="mod_2_btn">
+                  Ha, Davom etish
+                </div>
               </div>
             </div>
+          </>
+        ) : (
+          <></>
+        )}
 
-            <div onClick={() => clientAdd()} className="mod_2_btn">
-              Ha, Davom etish
-            </div>
-          </div>
-        </div>
         {mod ? (
           <>
             <div className={`modalcha`}>
               <div className="d-flex flex-column justify-content-between h-100">
-                <form onSubmit={() => setMod2(!mod2)} action="">
+                <form onSubmit={handleModals} action="">
                   <div className="mod_text">
                     <div className="mod_name">
                       <div className="mod_name_h">Klient Qo’shish</div>
@@ -462,7 +479,7 @@ const OperProduct = () => {
                       <input
                         required
                         minLength={9}
-                        maxLength={9}
+                        maxLength={15}
                         value={passNum}
                         onChange={(e) => setPassNum(e.target.value)}
                         className="mod_text_inp"
@@ -470,7 +487,7 @@ const OperProduct = () => {
                       />
                     </div>
                     <div className="mod_text_box">
-                      <div className="mod_text_h">Passport berilgan vaqti</div>
+                      <div className="mod_text_h">{"Tug'ilgan"} vaqti</div>
                       <input
                         placeholder="01.01.2020"
                         required
@@ -491,6 +508,17 @@ const OperProduct = () => {
                         onChange={(e) => setPassExpire(e.target.value)}
                         className="mod_text_inp"
                         type="date"
+                      />
+                    </div>
+                    <div className="mod_text_box">
+                      <div className="mod_text_h">Fuqaroligi</div>
+                      <input
+                        placeholder="Uzbekistan"
+                        value={residence}
+                        required
+                        onChange={(e) => setResidence(e.target.value)}
+                        className="mod_text_inp"
+                        type="text"
                       />
                     </div>
                     <div className="mod_text_box">
@@ -681,7 +709,7 @@ const OperProduct = () => {
                       />
                     </div>
                     <div className="mod_text_box">
-                      <div className="mod_text_h">Passport berilgan vaqti</div>
+                      <div className="mod_text_h">Tug'ilgan vaqti</div>
                       <input
                         value={currentClient?.passport_date}
                         disabled
@@ -698,6 +726,16 @@ const OperProduct = () => {
                         disabled
                         className="mod_text_inp"
                         type="date"
+                      />
+                    </div>
+                    <div className="mod_text_box">
+                      <div className="mod_text_h">Fuqaroligi</div>
+                      <input
+                        placeholder="Uzbekistan"
+                        value={currentClient?.residence}
+                        disabled
+                        className="mod_text_inp"
+                        type="text"
                       />
                     </div>
                     <div className="mod_text_box">
