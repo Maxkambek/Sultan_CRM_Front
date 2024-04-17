@@ -81,7 +81,11 @@ const OperPacket = () => {
               <div
                 key={index}
                 className={`pac_main_box ${
-                  item.type_paket == "VIP" ? "active" : ""
+                  item.type_paket == "VIP"
+                    ? "active"
+                    : item.type_paket == "Comfort"
+                    ? "active_ye"
+                    : ""
                 }`}
               >
                 <div className="pac_main_text">
@@ -90,11 +94,17 @@ const OperPacket = () => {
                       src={
                         item.type_paket == "VIP"
                           ? "/img/cal_gold.png"
+                          : item.type_paket == "Comfort"
+                          ? "/img/icon_cal_2.png"
                           : `/img/icon_cal.png`
                       }
                       alt=""
                     />
-                    <div className="pac_main_h">{item.date_go}</div>
+                    <div className="pac_main_h">
+                      {item.date_go.slice(8, 12)} {"-"}
+                      {item.date_go.slice(5, 7)} {"-"}
+                      {item.date_go.slice(0, 4)}
+                    </div>
                   </div>
                 </div>
                 <div className="pac_main_text">

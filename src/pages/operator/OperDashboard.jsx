@@ -83,7 +83,7 @@ const OperDashboard = () => {
     axios
       .get(
         API_PATH +
-          `/account/top-operators?search=${searchOperator}&filter=${filterOperator}`,
+          `account/top-operators?search=${searchOperator}&filter=${filterOperator}`,
         CONFIG
       )
       .then((res) => {
@@ -93,7 +93,7 @@ const OperDashboard = () => {
 
   useEffect(() => {
     getOperators();
-  }, [searchOperator]);
+  }, [searchOperator, filterOperator]);
 
   return (
     <>

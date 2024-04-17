@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {} from "react";
 import { useParams } from "react-router-dom";
 import { API_PATH, CONFIG, IMAGE_CONFIG } from "../../constants/constants";
@@ -9,7 +9,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { PDFExport } from "@progress/kendo-react-pdf";
+import styled from "@emotion/styled";
 
 const OperProduct = () => {
   const [userId, setUserId] = useState(localStorage.getItem("USER_ID") || "");
@@ -121,6 +122,18 @@ const OperProduct = () => {
   const handleModals = () => {
     setMod2(!mod2);
   };
+  const pdfExportComponent = useRef(null);
+  const contentArea = useRef(null);
+  const [layoutSelection, setLayoutSelection] = useState({
+    text: "A4",
+    value: "size-a4",
+  });
+
+  const handleExportWithComponent = () => {
+    pdfExportComponent.current.save();
+  };
+
+  const PDFBody = styled.div``;
   return (
     <>
       <div className="Product">
@@ -263,73 +276,79 @@ const OperProduct = () => {
               </div>
             </div>
           </div>
-          <div className="prod_text for_dnone_media">
-            <div className="prod_text_h prod_text_h1">#</div>
-            <div className="prod_text_h prod_text_h2">F.I.O</div>
-            <div className="prod_text_h prod_text_h3">Pass Num</div>
-            <div className="prod_text_h prod_text_h4">Narxi</div>
-            <div className="prod_text_h prod_text_h4">To’lov</div>
-            <div className="prod_text_h prod_text_h5">Qoldi</div>
-            <div className="prod_text_h prod_text_h6">Pass File</div>
-            <div className="prod_text_h prod_text_h7">Visa</div>
-            <div className="prod_text_h prod_text_h8">Tel Num</div>
-            <div className="prod_text_h prod_text_h9">Joylashuv</div>
-            <div className="prod_text_h prod_text_h10">Hudud</div>
-            <div className="prod_text_h prod_text_h11 text-center">Filiall</div>
-          </div>
-          {data?.map((item, index) => (
-            <div key={index} className="prod_text2 for_dnone_media">
-              <div className="prod_text_p prod_text_h1">{index + 1}</div>
-              <div
-                onClick={() => {
-                  item.owner === userId
-                    ? clientGetID(item.id)
-                    : toast("Bu sizning mijozingiz emas!");
-                }}
-                className="prod_text_p prod_text_h2 cursor"
-              >
-                {item.full_name}
+          <PDFExport ref={pdfExportComponent}>
+            <PDFBody>
+              <div className="prod_text for_dnone_media">
+                <div className="prod_text_h prod_text_h1">#</div>
+                <div className="prod_text_h prod_text_h2">F.I.O</div>
+                <div className="prod_text_h prod_text_h3">Pass Num</div>
+                <div className="prod_text_h prod_text_h4">Narxi</div>
+                <div className="prod_text_h prod_text_h4">To’lov</div>
+                <div className="prod_text_h prod_text_h5">Qoldi</div>
+                <div className="prod_text_h prod_text_h6">Pass File</div>
+                <div className="prod_text_h prod_text_h7">Visa</div>
+                <div className="prod_text_h prod_text_h8">Tel Num</div>
+                <div className="prod_text_h prod_text_h9">Joylashuv</div>
+                <div className="prod_text_h prod_text_h10">Hudud</div>
+                {/* <div className="prod_text_h prod_text_h11 text-center">Filiall</div> */}
               </div>
-              <div className="prod_text_p prod_text_h3">
-                {item.passport_seria}
-              </div>
-              <div className="prod_text_p prod_text_h4">$ {item.price}</div>
-              <div className="prod_text_p prod_text_h4">
-                $ {item.payment_taken}
-              </div>
-              <div className="prod_text_p red prod_text_h5">
-                {" "}
-                $ {item.price - item.payment_taken}
-              </div>
-              <div className="prod_text_p prod_text_h6">
-                <a target="_blank" href={item.passport_file}>
-                  <span>PassFile</span>
-                </a>
-              </div>
-              <div className="prod_text_p prod_text_h7">
-                {item.visa_file ? (
-                  <>
-                    <a target="_blank" href={item.visa_file}>
-                      {" "}
-                      <span>VisaFile</span>
+              {data?.map((item, index) => (
+                <div key={index} className="prod_text2 for_dnone_media">
+                  <div className="prod_text_p prod_text_h1">{index + 1}</div>
+                  <div
+                    onClick={() => {
+                      item.owner === userId
+                        ? clientGetID(item.id)
+                        : toast("Bu sizning mijozingiz emas!");
+                    }}
+                    className="prod_text_p prod_text_h2 cursor"
+                  >
+                    {item.full_name}
+                  </div>
+                  <div className="prod_text_p prod_text_h3">
+                    {item.passport_seria}
+                  </div>
+                  <div className="prod_text_p prod_text_h4">$ {item.price}</div>
+                  <div className="prod_text_p prod_text_h4">
+                    $ {item.payment_taken}
+                  </div>
+                  <div className="prod_text_p red prod_text_h5">
+                    {" "}
+                    $ {item.price - item.payment_taken}
+                  </div>
+                  <div className="prod_text_p prod_text_h6">
+                    <a target="_blank" href={item.passport_file}>
+                      <span>PassFile</span>
                     </a>
-                  </>
-                ) : (
-                  <>
-                    <span>VisaFile</span>
-                  </>
-                )}
-              </div>
-              <div className="prod_text_p prod_text_h8">{item.phone}</div>
-              <div className="prod_text_p prod_text_h9">{item.stay}</div>
-              <div className="prod_text_p prod_text_h10">{item.country}</div>
-              <div className="prod_text_p prod_text_h11">
+                  </div>
+                  <div className="prod_text_p prod_text_h7">
+                    {item.visa_file ? (
+                      <>
+                        <a target="_blank" href={item.visa_file}>
+                          {" "}
+                          <span>VisaFile</span>
+                        </a>
+                      </>
+                    ) : (
+                      <>
+                        <span>VisaFile</span>
+                      </>
+                    )}
+                  </div>
+                  <div className="prod_text_p prod_text_h8">{item.phone}</div>
+                  <div className="prod_text_p prod_text_h9">{item.stay}</div>
+                  <div className="prod_text_p prod_text_h10">
+                    {item.country}
+                  </div>
+                  {/* <div className="prod_text_p prod_text_h11">
                 {item.branch_name}
-              </div>
-            </div>
-          ))}
+              </div> */}
+                </div>
+              ))}
+            </PDFBody>
+          </PDFExport>
         </div>
-
+        
         <div className="accor_for_media">
           {data?.map((item, index) => (
             <>
@@ -408,10 +427,10 @@ const OperProduct = () => {
                       <div className="accor_item_h">Hudud</div>
                       <div className="accor_item_p">{item.country}</div>
                     </div>
-                    <div className="accor_item">
+                    {/* <div className="accor_item">
                       <div className="accor_item_h">Filiall</div>
                       <div className="accor_item_p">{item.branch_name}</div>
-                    </div>
+                    </div> */}
                   </Typography>
                 </AccordionDetails>
               </Accordion>
